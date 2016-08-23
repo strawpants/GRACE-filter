@@ -1,0 +1,10 @@
+This directory contains the following test scenario:
+input:GSM-2_2008122-2008153_0030_EIGEN_G---_0004in (GRACE potential residuals)
+
+After applying the filtermatrix Wbd_2-120.a_1d13p_4
+
+we should have the following output:
+
+GSM-2_2008122-2008153_0030_EIGEN_G---_0004out
+
+The standard deviations shown are derived from a simple (diagonal errors only) error propagation.
