@@ -1,21 +1,25 @@
-%function which reads in a binary file containing symmetric/full or block
-%diagonal matrices and associated vectors and parameters
-%Roelof Rietbroek, 7-1-2008
-%updated: 29-07-2008
-%
-%usage: dat=read_BIN(file)
-%returns a structure array 'dat' with the file content
-% the matrix remains in packed form (dat.pack1 field)
-%or:    dat=read_BIN(file,'F')
-% also expands the matrix to its full form (dat.mat1 field)
-% Warning: this option may cause excessive RAM memory use with large matrices
-%function now also works with Octave
-
-%Updated 6-08-08: new Binary version can also be read in
-%Updated 5-12-08: unpacking is perfomed with a compiled mex fortran routine
-%updated 01-08-2010 allows version 2.5 to be read
-
-function dat=read_BINslow(file,varargin)
+%% Function which reads in a binary file containing symmetric/full or block
+%% diagonal matrices and associated vectors and parameters
+%% 
+%% Usage: dat=read_BIN(file)
+%%      file (input,string): input file
+%%      dat (output,struct): Structure with the file content
+%%      the matrix remains in packed form (dat.pack1 field)
+%%
+%% Or: dat=read_BIN(file,'F')
+%%      also expands the matrix to its full form (dat.mat1 field)
+%%      Warning: this option may cause excessive RAM memory use with large matrices
+%% 
+%% Initial version: 7-1-2008
+%% Updated: 29-07-2008: function now also works with Octave
+%% Updated 6-08-08: new Binary version can also be read in
+%% Updated 5-12-08: unpacking is perfomed with a compiled mex fortran routine
+%% Updated 01-08-2010 allows version 2.5 to be read
+%%
+%% Copyright Roelof Rietbroek 2016
+%% This software is licensed under the MIT license see https://github.com/strawpants/GRACE-filter/blob/master/LICENSE
+%% URL: https://github.com/strawpants/GRACE-filter
+function dat=read_BIN(file,varargin)
 
 unpack=false;
 
@@ -161,7 +165,7 @@ switch  dat.type
  case{'BDFULLV0','BDFULLVN','FULLSQV0','FULLSQVN'}
 
   if dat.ver <=2.2 % compatibility clause
-    dat.side2_d=dat.side1_d
+    dat.side2_d=dat.side1_d;
   else
     list=fread(fid,dat.nval2*24,'uint8=>char');
     %reshape characters and put in dat struct array
