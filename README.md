@@ -1,5 +1,5 @@
 # GRACE-filter
-Contains software for filtering (destriping) GRACE Stokes coefficients 
+Contains software for filtering (destriping) GRACE Stokes coefficients.
 
 ## DDK Filtering of GRACE Stokes coefficients
 updated 15 October 2012 (Added DDK4 and DDK5 to package) 
@@ -15,8 +15,10 @@ DDK1d13: filtered with inverse signal degree power law 1e13*deg^4 (DDK2)        
 DDK1d14: filtered with inverse signal degree power law 1e14*deg^4 (DDK1) strongest smoothing  
 
 
-### Filter Coefficients
+### The filter matrix and its coefficients
 The block diagonal filter coefficients can be found in the directory [data/DDK](data/DDK)
+
+If you don't want to be bothered with the storage scheme and just want to use octave/matlab to filter your coefficients just go [here](#octavefilt).
 
 The filter coefficients are based on a block diagonal approximation of the normal system for the month august in 2003. Together with a signal variance model which behaves as a degree dependent power law one can construct a filter matrix W which is also block diagonal:
 	
@@ -122,6 +124,19 @@ yielding:
 		-0.000000013374350
 		0.000000077291901
 
+
+### <a name="octavefilt"></a> Filtering spherical harmonic coefficients with Octave/Matlab
+The repository contains some m-scripts to filter coefficients with the anisotropic filter. The script [testfilter.m](tests/testfilter.m) executes some tests and compares the results with independent filter results. The required m-functions are located [here](src/matlab). 
+
+In essence, the first step is to load the filter coefficients, e.g.:
+```
+>> Wbd=read_BIN('../data/DDK/Wbd_2-120.a_1d13p_4')
+``` 
+with which then coefficients can be filtered in a second step: 
+```
+>> [cnmfilt,snmfilt]=filterSH(Wbd,cnm,snm)
+```
+Note that the coefficients are stored in (lower triangular) matrices which have rows corresponding to degrees and columns to the order. Taking into account the matlab style 1 indexing, a cosine coefficient, ``CNM``, with degree and order N,M is thus referenced as ``CNM=cnm(N+1,M+1)`` 
 
 ### References and further reading:
 
