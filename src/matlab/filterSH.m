@@ -1,15 +1,35 @@
 %% Filter spherical harmonic coefficients witha block diagonal fitler matrix
 %% Usage:
 %%  [cnmfilt,snmfilt]=filterSH(W,cnm,snm)
+%%  [cnmfilt,snmfilt,sigcnmfilt,sigsnmfilt]=filterSH(W,cnm,snm,sigcnm,sigsnm) (also propagate standard deviations)
 %%  W (input, struct): Struct containing the filter matrix (read by BIN_readslow)
 %%  cnm,snm (input,matrix(nmax+1,nmax+1)): Spherical harmonic coefficients in matrix form: row index and column index correspond to degree+1 and order+1 respectively
 %%  cnmfilt,snmfilt (output,matrix(nmax+1,nmax+1)): Filtered spherical harmonic coefficients
+%% optional arguments and output:
+%% sigcnm,sigsnm (input, matrix(nmax+1,nmax+1)): standard errors of the input coefficients
+%% sigcnmfilt,sigsnmfilt (output, matrix(nmax+1,nmax+1)): standard errors of the filtered output coefficients(using diagonal error propagation)
 %%
 %% TODO: extend the function to also allow error propagation (using varargin for input)
-%% Copyright Roelof Rietbroek 2016
+%% Copyright Roelof Rietbroek 2019
 %% This software is licensed under the MIT license see https://github.com/strawpants/GRACE-filter/blob/master/LICENSE
 %% URL: https://github.com/strawpants/GRACE-filter
-function [cnmfilt,snmfilt]=filterSH(W,cnm,snm)
+function [varargout]=filterSH(varargin)
+    %extract filter matrix 
+    W=varargin{1};
+    cnm=varargin{2};
+    snm=varargin{3};
+    properror=0;
+
+    if nargin == 5
+        sigcnm=varargin{4};
+        sigsnm=varargin{5};
+        properror=1;
+    end
+    if (nargin != 3) && (nargin !=5)
+        error("either call the function as [cnmfilt,snmfilt]=filterSH(W,cnm,snm) or [cnmfilt,snmfilt,sigcnmfilt,sigsnmfilt]=filterSH(W,cnm,snm,sigcnm,sigsnm)");
+    end
+
+
 
 %% check if we have a block diagonal filter matrix
 if(isfield(W,'type'))
@@ -33,7 +53,12 @@ if(isfield(W,'type'))
         %% Reserve space for output (will have same size as input) and set to zero
         cnmfilt=zeros(nmax+1,nmax+1);
         snmfilt=zeros(nmax+1,nmax+1);
-        
+    
+        if properror
+            sigcnmfilt=zeros(nmax+1,nmax+1);
+            sigsnmfilt=zeros(nmax+1,nmax+1);
+        end
+
         %% Loop parameter indicating the previous block number
         lastblckind=0;
         %% Loop parameter indicating the end position in the packed matrix of the previous block
@@ -75,10 +100,24 @@ if(isfield(W,'type'))
             else
                 snmfilt(order+1:nmaxout+1,order+1)=blockn(1:nmaxout+1-order,1:nmaxout+1-order)*snm(order+1:nmaxout+1,order+1);
             end
-            
+            if properror 
+                blockn=blockn.^2;
+                if(trig)
+                    sigcnmfilt(order+1:nmaxout+1,order+1)=sqrt(blockn(1:nmaxout+1-order,1:nmaxout+1-order)*(sigcnm(order+1:nmaxout+1,order+1).^2));
+                else
+                    sigsnmfilt(order+1:nmaxout+1,order+1)=sqrt(blockn(1:nmaxout+1-order,1:nmaxout+1-order)*(sigsnm(order+1:nmaxout+1,order+1).^2));
+                end
+            end
             %% Prepare the loop variables for next block
             lastblckind=W.blockind(iblk);
             lastindex=lastindex+sz^2;
+        end
+
+        varargout{1}=cnmfilt;
+        varargout{2}=snmfilt;
+        if properror
+            varargout{3}=sigcnmfilt;
+            varargout{4}=sigsnmfilt;
         end
     else
         error('Not a block diagonal matrix');
