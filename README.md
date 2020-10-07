@@ -2,18 +2,27 @@
 Contains software for filtering (destriping) GRACE Stokes coefficients.
 
 ## DDK Filtering of GRACE Stokes coefficients
-updated 15 October 2012 (Added DDK4 and DDK5 to package) 
-updated 29 January 2015 (Added DDK6 to DDK8 to package) 
+* updated 15 October 2012 (Added DDK4 and DDK5 to package) 
+* updated 29 January 2015 (Added DDK6 to DDK8 to package) 
+* updated 24 April 2020 (added very weak experimental filters)
+* updated 7 October 2020 (added very strong experimental filters)
 
-DDK5d9:  filtered with inverse signal degree power law 5e9*deg^4  (DDK8) weakest smoothing  
-DDK1d10: filtered with inverse signal degree power law 1e10*deg^4 (DDK7)         |  
-DDK5d10: filtered with inverse signal degree power law 5e10*deg^4 (DDK6)         |  
-DDK1d11: filtered with inverse signal degree power law 1e11*deg^4 (DDK5)         |  
-DDK5d11: filtered with inverse signal degree power law 5e11*deg^4 (DDK4)         |  
-DDK1d12: filtered with inverse signal degree power law 1e12*deg^4 (DDK3)         |  
-DDK1d13: filtered with inverse signal degree power law 1e13*deg^4 (DDK2)         |  
-DDK1d14: filtered with inverse signal degree power law 1e14*deg^4 (DDK1) strongest smoothing  
-
+``` 
+DDK1d8:    filtered with inverse signal degree power law 1e8*deg^4      (experimental DDK11)   weakest smoothing  
+DDK2.5d8:  filtered with inverse signal degree power law 2.5e8*deg^4    (experimental DDK10)          | 
+DDK1d9:    filtered with inverse signal degree power law 1e9*deg^4      (experimental DDK9) 	      |	 
+DDK5d9:    filtered with inverse signal degree power law 5e9*deg^4      (DDK8)	     	              | 
+DDK1d10:   filtered with inverse signal degree power law 1e10*deg^4     (DDK7)		              |  
+DDK5d10:   filtered with inverse signal degree power law 5e10*deg^4     (DDK6)	                      |  
+DDK1d11:   filtered with inverse signal degree power law 1e11*deg^4     (DDK5)		              |  
+DDK5d11:   filtered with inverse signal degree power law 5e11*deg^4     (DDK4)		              |  
+DDK1d12:   filtered with inverse signal degree power law 1e12*deg^4     (DDK3)		              |  
+DDK1d13:   filtered with inverse signal degree power law 1e13*deg^4     (DDK2)		              |  
+DDK1d14:   filtered with inverse signal degree power law 1e14*deg^4     (DDK1)		              | 
+DDK5d14:   filtered with inverse signal degree power law 5e14*deg^4     (experimental DDK0)           | 
+DDK1d15:   filtered with inverse signal degree power law 1e15*deg^4     (experimental DDKmin1)        | 
+DDK5d15:   filtered with inverse signal degree power law 5e15*deg^4     (experimental DDKmin2) strongest smoothing  
+```
 
 ### The filter matrix and its coefficients
 The block diagonal filter coefficients can be found in the directory [data/DDK](data/DDK)
