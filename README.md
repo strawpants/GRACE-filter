@@ -1,6 +1,10 @@
 # GRACE-filter
 Contains software for filtering (destriping) GRACE Stokes coefficients.
 
+**Update 2025**
+Applying the filter using Python tools is now possible using the [shxarray module](https://github.com/ITC-Water-Resources/shxarray). Spatial visualizations and an example of applying the filters can be found in [the shxarray documentation](https://shxarray.wobbly.earth/latest/notebooks/visualize_filter.html).
+
+
 ## DDK Filtering of GRACE Stokes coefficients
 * updated 15 October 2012 (Added DDK4 and DDK5 to package) 
 * updated 29 January 2015 (Added DDK6 to DDK8 to package) 
